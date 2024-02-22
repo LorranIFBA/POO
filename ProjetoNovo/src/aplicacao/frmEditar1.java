@@ -5,6 +5,9 @@
  */
 package aplicacao;
 
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Lorran
@@ -16,6 +19,17 @@ public class frmEditar1 extends javax.swing.JFrame {
      */
     public frmEditar1() {
         initComponents();
+    }
+    
+    private void cancelar() {
+        Object[] opcao = {"Não", "Sim"};
+        int opcaoSelecionada = JOptionPane.showOptionDialog(this, "Deseja realmente sair?", "Aviso",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, opcao, opcao[0]);
+        if (opcaoSelecionada == 1) {
+            
+            this.dispose();
+            new frmPrincipal().setVisible(true);
+        }
     }
 
     /**
@@ -44,6 +58,11 @@ public class frmEditar1 extends javax.swing.JFrame {
         });
 
         btCanc.setText("Cancelar");
+        btCanc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -82,9 +101,29 @@ public class frmEditar1 extends javax.swing.JFrame {
     private void btContActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btContActionPerformed
         // TODO add your handling code here:
         String idBusca = txtEdt.getText();
-        new frmEditar2(idBusca).setVisible(true);
-        this.dispose();
+        if (txtEdt.getText().matches("^[a-zA-Z0-9\\-]+$")){
+            try {
+                new frmEditar2(idBusca).setVisible(true);
+            } catch (Exception ex){
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "O funcionário não foi encontrado.");
+                this.dispose();
+                new frmPrincipal().setVisible(true);
+            }
+
+
+            this.dispose();   
+        } else{
+            JOptionPane.showMessageDialog(this, "Insira apenas números.");
+        }
+        
+        
     }//GEN-LAST:event_btContActionPerformed
+
+    private void btCancActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancActionPerformed
+        // TODO add your handling code here:
+        cancelar();
+    }//GEN-LAST:event_btCancActionPerformed
 
     /**
      * @param args the command line arguments

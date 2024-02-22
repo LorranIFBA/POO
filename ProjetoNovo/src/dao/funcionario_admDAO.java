@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.sql.SQLException;
 import java.util.List;
 import modelo.funcionario_adm;
 
@@ -16,5 +17,5 @@ public interface funcionario_admDAO {
     public int editar(funcionario_adm funcionario);
     public int apagar(int id);
     public List<funcionario_adm> listar();
-    public funcionario_adm selecionar(String id);
+    public funcionario_adm selecionar(String id) throws SQLException;
 }

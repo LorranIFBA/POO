@@ -7,6 +7,7 @@ package aplicacao;
 
 import dao.DaoFactory;
 import dao.funcionario_admDAO;
+import java.time.Year;
 import javax.swing.JOptionPane;
 import modelo.funcionario_adm;
 
@@ -25,34 +26,61 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
      */
     public frmFuncionarioADM() {
         initComponents();
+        String[] dias = new String[31];
+        for (int i = 0; i < 31; i++) {
+            dias[i] = String.valueOf(i + 1);
+        }
+        String[] mes = new String[12];
+        for (int i = 0; i < 12; i++) {
+            mes[i] = String.valueOf(i + 1);
+        }
+        int anoAtual = Year.now().getValue();
+        String[] ano = new String[101];
+        for (int i = 0; i <= 100; i++) {
+            ano[i] = String.valueOf(anoAtual - i);
+        }
+
+        cbDiaC.setModel(new javax.swing.DefaultComboBoxModel<>(dias));
+        cbMesC.setModel(new javax.swing.DefaultComboBoxModel<>(mes));
+        cbAnoC.setModel(new javax.swing.DefaultComboBoxModel<>(ano));
         
-        
+        cbDiaF.setModel(new javax.swing.DefaultComboBoxModel<>(dias));
+        cbMesF.setModel(new javax.swing.DefaultComboBoxModel<>(mes));
+        cbAnoF.setModel(new javax.swing.DefaultComboBoxModel<>(ano));
     }
     
     private void inserir(){
         funcionario_adm funcionario1 = new funcionario_adm();
 
-        String data_comeco = "" + txtAnoc.getText() + "-" + txtMesc.getText() + "-" + txtDiac.getText();
-        String data_fim = "" + txtAnof.getText() + "-" + txtMesf.getText() + "-" + txtDiaf.getText();
+        if(validacao()){
+            String data_comeco = "" + cbAnoC.getSelectedItem() + "-" + cbMesC.getSelectedItem() + "-" + cbDiaC.getSelectedItem();
+            String data_fim = "" + cbAnoF.getSelectedItem() + "-" + cbMesF.getSelectedItem() + "-" + cbDiaF.getSelectedItem();
         
-        funcionario1.setId_funcionario(txtId.getText());
-        funcionario1.setData_comeco(data_comeco);
-        funcionario1.setData_fim(data_fim);
-        funcionario1.setSalario(txtValor.getText());
-        
-        
-        
-
-        int linha1 = funcionario1DAO.inserir(funcionario1);
+            funcionario1.setId_funcionario(txtId.getText());
+            funcionario1.setData_comeco(data_comeco);
+            funcionario1.setData_fim(data_fim);
+            funcionario1.setSalario(txtValor.getText());
+            
+            int linha1 = funcionario1DAO.inserir(funcionario1);
 
         
-        if (linha1 > 0){
-            JOptionPane.showMessageDialog(this, "Funcionario criado com sucesso!");
-            new frmNovoFuncionario(funcionario1).setVisible(true);
-            this.dispose();
-        } else{
-            JOptionPane.showMessageDialog(this, "Erro ao inserir funcionario.");
+            if (linha1 > 0){
+                JOptionPane.showMessageDialog(this, "Funcionario criado com sucesso!");
+                new frmNovoFuncionario(funcionario1).setVisible(true);
+                this.dispose();
+            } else{
+                JOptionPane.showMessageDialog(this, "Erro ao inserir funcionario.");
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Verifique os dados inseridos.");
         }
+        
+        
+        
+        
+
+        
     }
     
         private void cancelar() {
@@ -60,9 +88,24 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
         int opcaoSelecionada = JOptionPane.showOptionDialog(this, "Deseja realmente sair?", "Aviso",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, opcao, opcao[0]);
         if (opcaoSelecionada == 1) {
+            
             this.dispose();
+            new frmPrincipal().setVisible(true);
         }
     }
+        
+        private boolean validacao(){
+            boolean erro = false;
+            
+            if (!txtId.getText().matches("^[0-9]+$")){
+                erro = true;
+            }
+            
+            if (!txtValor.getText().matches("^[0-9]+$")){
+                erro = true;
+            }
+            return !erro;
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,21 +119,17 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        txtDiac = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
-        txtMesc = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
-        txtAnoc = new javax.swing.JTextField();
-        txtDiaf = new javax.swing.JTextField();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        txtMesf = new javax.swing.JTextField();
-        txtAnof = new javax.swing.JTextField();
         txtValor = new javax.swing.JTextField();
         btAdd = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
+        cbDiaC = new javax.swing.JComboBox<>();
+        cbMesC = new javax.swing.JComboBox<>();
+        cbAnoC = new javax.swing.JComboBox<>();
+        cbDiaF = new javax.swing.JComboBox<>();
+        cbMesF = new javax.swing.JComboBox<>();
+        cbAnoF = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,14 +138,6 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
         jLabel7.setText("Data de final de contrato:");
 
         jLabel8.setText("Valor do Contrato(ano):");
-
-        jLabel17.setText("/");
-
-        jLabel18.setText("/");
-
-        jLabel19.setText("/");
-
-        jLabel20.setText("/");
 
         btAdd.setText("Adicionar");
         btAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -124,6 +155,23 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
 
         jLabel1.setText("ID do Funcionário:");
 
+        cbDiaC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbDiaC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbDiaCActionPerformed(evt);
+            }
+        });
+
+        cbMesC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbAnoC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbDiaF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbMesF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbAnoF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -132,14 +180,13 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel6)
@@ -147,35 +194,28 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(txtDiac, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(cbDiaC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel17)
+                                                .addComponent(cbMesC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMesc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel18)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtAnoc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(cbAnoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
-                                                .addComponent(txtDiaf, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(cbDiaF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel20)
+                                                .addComponent(cbMesF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtMesf, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel19)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtAnof, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 140, Short.MAX_VALUE))
+                                                .addComponent(cbAnoF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGap(0, 104, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btAdd)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btCancelar)))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,23 +224,19 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtDiac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17)
-                    .addComponent(txtMesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel18)
-                    .addComponent(txtAnoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(cbDiaC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbMesC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbAnoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(txtDiaf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel20)
-                    .addComponent(txtMesf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19)
-                    .addComponent(txtAnof, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(cbDiaF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbMesF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbAnoF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -224,6 +260,10 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
         // TODO add your handling code here:
         cancelar();
     }//GEN-LAST:event_btCancelarActionPerformed
+
+    private void cbDiaCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDiaCActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbDiaCActionPerformed
 
     /**
      * @param args the command line arguments
@@ -270,21 +310,17 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAdd;
     private javax.swing.JButton btCancelar;
+    private javax.swing.JComboBox<String> cbAnoC;
+    private javax.swing.JComboBox<String> cbAnoF;
+    private javax.swing.JComboBox<String> cbDiaC;
+    private javax.swing.JComboBox<String> cbDiaF;
+    private javax.swing.JComboBox<String> cbMesC;
+    private javax.swing.JComboBox<String> cbMesF;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JTextField txtAnoc;
-    private javax.swing.JTextField txtAnof;
-    private javax.swing.JTextField txtDiac;
-    private javax.swing.JTextField txtDiaf;
     private javax.swing.JTextField txtId;
-    private javax.swing.JTextField txtMesc;
-    private javax.swing.JTextField txtMesf;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
 }

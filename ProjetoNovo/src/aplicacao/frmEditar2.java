@@ -9,8 +9,12 @@ import dao.DaoFactory;
 import dao.funcionario_admDAO;
 import dao.funcionario_endDAO;
 import dao.funcionario_pesDAO;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.funcionario_adm;
 import modelo.funcionario_end;
@@ -25,12 +29,54 @@ public class frmEditar2 extends javax.swing.JFrame {
     funcionario_admDAO funcionario1DAO = DaoFactory.criarFuncionario_admDAO();
     funcionario_pesDAO funcionario2DAO = DaoFactory.criarFuncionario_pesDAO();
     funcionario_endDAO funcionario3DAO = DaoFactory.criarFuncionario_endDAO();
+    
+    
 
     /**
      * Creates new form frFuncionario
+     * @throws java.sql.SQLException
      */
-    public frmEditar2(String id) {
+    public frmEditar2(String id) throws SQLException {
         initComponents();
+        
+        String[] dias = new String[31];
+        for (int i = 0; i < 31; i++) {
+            dias[i] = String.valueOf(i + 1);
+        }
+        String[] meses = new String[12];
+        for (int i = 0; i < 12; i++) {
+            meses[i] = String.valueOf(i + 1);
+        }
+        int anoAtual = Year.now().getValue();
+        String[] anos = new String[101];
+        for (int i = 0; i <= 100; i++) {
+            anos[i] = String.valueOf(anoAtual - i);
+        }
+        
+        String[] ufs = {
+            "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES",
+            "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ",
+            "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" 
+        };
+        cbDiaN.setModel(new javax.swing.DefaultComboBoxModel<>(dias));
+        cbMesN.setModel(new javax.swing.DefaultComboBoxModel<>(meses));
+        cbAnoN.setModel(new javax.swing.DefaultComboBoxModel<>(anos));
+        
+        cbDiaC.setModel(new javax.swing.DefaultComboBoxModel<>(dias));
+        cbMesC.setModel(new javax.swing.DefaultComboBoxModel<>(meses));
+        cbAnoC.setModel(new javax.swing.DefaultComboBoxModel<>(anos));
+        
+        cbDiaF.setModel(new javax.swing.DefaultComboBoxModel<>(dias));
+        cbMesF.setModel(new javax.swing.DefaultComboBoxModel<>(meses));
+        cbAnoF.setModel(new javax.swing.DefaultComboBoxModel<>(anos));
+        
+        cbUF.setModel(new javax.swing.DefaultComboBoxModel<>(ufs));
+        
+        try{
+            selectTest(id);
+        } catch(SQLException e){
+            throw e;
+        }
         
         funcionario_adm funcionario1 = funcionario1DAO.selecionar(id);
         funcionario_pes funcionario2 = funcionario2DAO.selecionar(id);
@@ -39,45 +85,45 @@ public class frmEditar2 extends javax.swing.JFrame {
         lblID.setText(id);
         txtNome.setText(funcionario2.getNome());
         txtDocumento.setText(funcionario2.getDocumento());
-        txtSexo.setText(funcionario2.getSexo());
+        
+        cbSexo.setSelectedItem(funcionario2.getSexo());
         
         LocalDate data = LocalDate.parse(funcionario2.getData_nasc());
         String ano = String.valueOf(data.getYear());
         String mes = String.valueOf(data.getMonthValue());
         String dia = String.valueOf(data.getDayOfMonth());
+
+        cbDiaN.setSelectedItem(dia);
+        cbMesN.setSelectedItem(mes);
+        cbAnoN.setSelectedItem(ano);
         
-        txtDian.setText(dia);
-        txtMesn.setText(mes);
-        txtAnon.setText(ano);
         
         data = LocalDate.parse(funcionario1.getData_comeco());
         ano = String.valueOf(data.getYear());
         mes = String.valueOf(data.getMonthValue());
         dia = String.valueOf(data.getDayOfMonth());
-        
-        txtDiac.setText(dia);
-        txtMesc.setText(mes);
-        txtAnoc.setText(ano);
+                
+        cbDiaC.setSelectedItem(dia);
+        cbMesC.setSelectedItem(mes);
+        cbAnoC.setSelectedItem(ano);
         
         data = LocalDate.parse(funcionario1.getData_fim());
         ano = String.valueOf(data.getYear());
         mes = String.valueOf(data.getMonthValue());
         dia = String.valueOf(data.getDayOfMonth());
         
-        txtDiaf.setText(dia);
-        txtMesf.setText(mes);
-        txtAnof.setText(ano);
+        
+        cbDiaF.setSelectedItem(dia);
+        cbMesF.setSelectedItem(mes);
+        cbAnoF.setSelectedItem(ano);
         
         txtValor.setText(funcionario1.getSalario());
         
         txtRua.setText(funcionario3.getRua());
         txtCep.setText(funcionario3.getCep());
         txtCidade.setText(funcionario3.getCidade());
-        txtUf.setText(funcionario3.getUf());
-        txtAdd.setText(funcionario3.getInf_add());
-        
-        
-        
+        cbUF.setSelectedItem(funcionario3.getUf());
+        txtAdd.setText(funcionario3.getInf_add());   
     }
     
     private void editar(){
@@ -85,41 +131,48 @@ public class frmEditar2 extends javax.swing.JFrame {
         funcionario_pes funcionario2 = new funcionario_pes();
         funcionario_end funcionario3 = new funcionario_end();
         
-        String data_nasc = "" + txtAnon.getText() + "-" + txtMesn.getText() + "-" + txtDian.getText();
-        String data_comeco = "" + txtAnoc.getText() + "-" + txtMesc.getText() + "-" + txtDiac.getText();
-        String data_fim = "" + txtAnof.getText() + "-" + txtMesf.getText() + "-" + txtDiaf.getText();
-        
-        String id = lblID.getText();
-        
-        funcionario1.setId_funcionario(id);
-        funcionario2.setId_funcionario(id);
-        funcionario3.setId_funcionario(id);
-        
-        funcionario1.setData_comeco(data_comeco);
-        funcionario1.setData_fim(data_fim);
-        funcionario1.setSalario(txtValor.getText());
-        
-        funcionario2.setData_nasc(data_nasc);
-        funcionario2.setDocumento(txtDocumento.getText());
-        funcionario2.setNome(txtNome.getText());
-        funcionario2.setSexo(txtSexo.getText());
-        
-        funcionario3.setCep(txtCep.getText());
-        funcionario3.setCidade(txtCidade.getText());
-        funcionario3.setInf_add(txtAdd.getText());
-        funcionario3.setRua(txtRua.getText());
-        funcionario3.setUf(txtUf.getText());
-        
+        if (validacao()){
+           String data_nasc = "" + cbAnoN.getSelectedItem() + "-" + cbMesN.getSelectedItem() + "-" + cbDiaN.getSelectedItem();
+            String data_comeco = "" + cbAnoC.getSelectedItem() + "-" + cbMesC.getSelectedItem() + "-" + cbDiaC.getSelectedItem();
+            String data_fim = "" + cbAnoF.getSelectedItem() + "-" + cbMesF.getSelectedItem() + "-" + cbDiaF.getSelectedItem();
 
-        int linha1 = funcionario1DAO.editar(funcionario1);
-        int linha2 = funcionario2DAO.editar(funcionario2);
-        int linha3 = funcionario3DAO.editar(funcionario3);
-        
-        if (linha1 > 0 && linha2 > 0 && linha3 > 0){
-            JOptionPane.showMessageDialog(this, "Funcionario adicionado com sucesso!");
-        } else{
-            JOptionPane.showMessageDialog(this, "Erro ao inserir funcionario.");
+            String id = lblID.getText();
+
+            funcionario1.setId_funcionario(id);
+            funcionario2.setId_funcionario(id);
+            funcionario3.setId_funcionario(id);
+
+            funcionario1.setData_comeco(data_comeco);
+            funcionario1.setData_fim(data_fim);
+            funcionario1.setSalario(txtValor.getText());
+
+            funcionario2.setData_nasc(data_nasc);
+            funcionario2.setDocumento(txtDocumento.getText());
+            funcionario2.setNome(txtNome.getText());
+            funcionario2.setSexo((String) cbSexo.getSelectedItem());
+
+            funcionario3.setCep(txtCep.getText());
+            funcionario3.setCidade(txtCidade.getText());
+            funcionario3.setInf_add(txtAdd.getText());
+            funcionario3.setRua(txtRua.getText());
+            funcionario3.setUf((String) cbUF.getSelectedItem());
+
+
+            int linha1 = funcionario1DAO.editar(funcionario1);
+            int linha2 = funcionario2DAO.editar(funcionario2);
+            int linha3 = funcionario3DAO.editar(funcionario3);
+
+            if (linha1 > 0 && linha2 > 0 && linha3 > 0){
+                JOptionPane.showMessageDialog(this, "Funcionario editado com sucesso!");
+                this.dispose();
+            } else{
+                JOptionPane.showMessageDialog(this, "Erro ao editar funcionario.");
+            } 
+        } else {
+            JOptionPane.showMessageDialog(this, "Verifique os dados inseridos.");
         }
+        
+        
     }
     
         private void cancelar() {
@@ -128,8 +181,47 @@ public class frmEditar2 extends javax.swing.JFrame {
                 JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, opcao, opcao[0]);
         if (opcaoSelecionada == 1) {
             this.dispose();
+            new frmPrincipal().setVisible(true);
         }
     }
+        private void selectTest(String id) throws SQLException{
+        try {
+            funcionario_adm funcionario1 = funcionario1DAO.selecionar(id);
+        } catch (SQLException ex) {
+            this.dispose();
+            new frmPrincipal().setVisible(true);
+            throw ex;         
+        }
+    }
+        private boolean validacao(){
+            boolean erro = false;
+            
+            if (!txtValor.getText().matches("^[0-9]+$")){
+                erro = true;
+            }
+            
+            if (!txtDocumento.getText().matches("^[a-zA-Z0-9\\-]+$")){
+                erro = true;
+            }
+            
+            if (!txtNome.getText().matches("^[A-Za-z\\-]+$")){
+                erro = true;
+            }
+            
+            if (!txtCep.getText().matches("^[0-9]+$")){
+                erro = true;
+            }
+            
+            if (!txtCidade.getText().matches("^[A-Za-z\\-]+$")){
+                erro = true;
+            }
+            
+            if (!txtRua.getText().matches("^[A-Za-z\\-]+$")){
+                erro = true;
+            }
+            
+            return !erro;
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -155,32 +247,26 @@ public class frmEditar2 extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
-        txtSexo = new javax.swing.JTextField();
-        txtDian = new javax.swing.JTextField();
-        jLabel15 = new javax.swing.JLabel();
-        txtMesn = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        txtAnon = new javax.swing.JTextField();
         txtDocumento = new javax.swing.JTextField();
-        txtDiac = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
-        txtMesc = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
-        txtAnoc = new javax.swing.JTextField();
-        txtDiaf = new javax.swing.JTextField();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        txtMesf = new javax.swing.JTextField();
-        txtAnof = new javax.swing.JTextField();
         txtValor = new javax.swing.JTextField();
         txtRua = new javax.swing.JTextField();
         txtCidade = new javax.swing.JTextField();
-        txtUf = new javax.swing.JTextField();
         txtCep = new javax.swing.JTextField();
         txtAdd = new javax.swing.JTextField();
         btEdt = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
         lblID = new javax.swing.JLabel();
+        cbDiaN = new javax.swing.JComboBox<>();
+        cbMesN = new javax.swing.JComboBox<>();
+        cbAnoN = new javax.swing.JComboBox<>();
+        cbDiaC = new javax.swing.JComboBox<>();
+        cbMesC = new javax.swing.JComboBox<>();
+        cbAnoC = new javax.swing.JComboBox<>();
+        cbDiaF = new javax.swing.JComboBox<>();
+        cbMesF = new javax.swing.JComboBox<>();
+        cbAnoF = new javax.swing.JComboBox<>();
+        cbSexo = new javax.swing.JComboBox<>();
+        cbUF = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -212,18 +298,6 @@ public class frmEditar2 extends javax.swing.JFrame {
 
         jLabel14.setText("Informações Adicionais:");
 
-        jLabel15.setText("/");
-
-        jLabel16.setText("/");
-
-        jLabel17.setText("/");
-
-        jLabel18.setText("/");
-
-        jLabel19.setText("/");
-
-        jLabel20.setText("/");
-
         btEdt.setText("Editar");
         btEdt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,6 +311,28 @@ public class frmEditar2 extends javax.swing.JFrame {
                 btCancelarActionPerformed(evt);
             }
         });
+
+        cbDiaN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbMesN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbAnoN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbDiaC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbMesC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbAnoC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbDiaF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbMesF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbAnoF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        cbSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "F" }));
+
+        cbUF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -252,97 +348,80 @@ public class frmEditar2 extends javax.swing.JFrame {
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtRua, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel13)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel12)
-                                    .addGap(46, 46, 46)
-                                    .addComponent(txtUf))
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel11)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel11)
+                                        .addComponent(jLabel12))
                                     .addGap(26, 26, 26)
-                                    .addComponent(txtCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel14)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(cbUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btEdt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btCancelar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbDiaN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbMesN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbAnoN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cbDiaC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cbMesC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cbAnoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cbDiaF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cbMesF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cbAnoF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(25, 25, 25)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtDian, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel15)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtMesn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel16)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtAnon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel6)
-                                        .addComponent(jLabel7))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(txtDiac, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(jLabel17)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(txtMesc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(jLabel18)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(txtAnoc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(txtDiaf, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(jLabel20)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(txtMesf, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(jLabel19)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(txtAnof, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel9)
-                                            .addGap(76, 76, 76))))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel1)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(lblID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(jLabel2)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(25, 25, 25)
-                                    .addComponent(jLabel5)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btEdt)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btCancelar)))
+                            .addComponent(jLabel9))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -361,36 +440,31 @@ public class frmEditar2 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(txtDian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15)
-                    .addComponent(txtMesn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel16)
-                    .addComponent(txtAnon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(84, 84, 84)
+                    .addComponent(cbDiaN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbMesN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbAnoN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtDiac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17)
-                    .addComponent(txtMesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel18)
-                    .addComponent(txtAnoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbDiaC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbMesC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbAnoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
-                    .addComponent(txtDiaf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel20)
-                    .addComponent(txtMesf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19)
-                    .addComponent(txtAnof, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cbDiaF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbMesF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbAnoF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(69, 69, 69)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(txtRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -401,7 +475,7 @@ public class frmEditar2 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(txtUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
@@ -410,7 +484,7 @@ public class frmEditar2 extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(txtAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btEdt)
                     .addComponent(btCancelar))
@@ -423,7 +497,7 @@ public class frmEditar2 extends javax.swing.JFrame {
     private void btEdtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEdtActionPerformed
         // TODO add your handling code here:
         editar();
-        this.dispose();
+        
         
     }//GEN-LAST:event_btEdtActionPerformed
 
@@ -463,7 +537,11 @@ public class frmEditar2 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmEditar2(null).setVisible(true);
+                try {
+                    new frmEditar2(null).setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(frmEditar2.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -471,19 +549,24 @@ public class frmEditar2 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCancelar;
     private javax.swing.JButton btEdt;
+    private javax.swing.JComboBox<String> cbAnoC;
+    private javax.swing.JComboBox<String> cbAnoF;
+    private javax.swing.JComboBox<String> cbAnoN;
+    private javax.swing.JComboBox<String> cbDiaC;
+    private javax.swing.JComboBox<String> cbDiaF;
+    private javax.swing.JComboBox<String> cbDiaN;
+    private javax.swing.JComboBox<String> cbMesC;
+    private javax.swing.JComboBox<String> cbMesF;
+    private javax.swing.JComboBox<String> cbMesN;
+    private javax.swing.JComboBox<String> cbSexo;
+    private javax.swing.JComboBox<String> cbUF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -493,22 +576,11 @@ public class frmEditar2 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblID;
     private javax.swing.JTextField txtAdd;
-    private javax.swing.JTextField txtAnoc;
-    private javax.swing.JTextField txtAnof;
-    private javax.swing.JTextField txtAnon;
     private javax.swing.JTextField txtCep;
     private javax.swing.JTextField txtCidade;
-    private javax.swing.JTextField txtDiac;
-    private javax.swing.JTextField txtDiaf;
-    private javax.swing.JTextField txtDian;
     private javax.swing.JTextField txtDocumento;
-    private javax.swing.JTextField txtMesc;
-    private javax.swing.JTextField txtMesf;
-    private javax.swing.JTextField txtMesn;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtRua;
-    private javax.swing.JTextField txtSexo;
-    private javax.swing.JTextField txtUf;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
 }

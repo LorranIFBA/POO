@@ -5,6 +5,13 @@
  */
 package aplicacao;
 
+import conexao.ConexaoMySQL;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Lorran
@@ -14,9 +21,25 @@ public class frmPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form frmPrincipal
      */
+    
+    Connection conexao = null;
+    
     public frmPrincipal() {
         initComponents();
+        
+        try {
+            conexao = ConexaoMySQL.getConexao();
+        } catch (SQLException ex) {
+            Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "A base de dados não foi conectada com sucesso. O programa será fechado.");
+            System.exit(0);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(frmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

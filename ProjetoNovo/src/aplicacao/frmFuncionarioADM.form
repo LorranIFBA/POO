@@ -26,16 +26,15 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtId" min="-2" pref="79" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="txtValor" min="-2" pref="82" max="-2" attributes="0"/>
+                                  </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -44,36 +43,23 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" attributes="0">
-                                              <Component id="txtDiac" min="-2" pref="40" max="-2" attributes="0"/>
+                                              <Component id="cbDiaC" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
+                                              <Component id="cbMesC" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtMesc" min="-2" pref="40" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtAnoc" min="-2" pref="40" max="-2" attributes="0"/>
+                                              <Component id="cbAnoC" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <Group type="102" attributes="0">
-                                              <Component id="txtDiaf" min="-2" pref="40" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="cbDiaF" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
+                                              <Component id="cbMesF" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtMesf" min="-2" pref="40" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="txtAnof" min="-2" pref="40" max="-2" attributes="0"/>
+                                              <Component id="cbAnoF" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtValor" min="-2" pref="82" max="-2" attributes="0"/>
-                                  </Group>
                               </Group>
-                              <EmptySpace min="0" pref="140" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="104" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btAdd" min="-2" max="-2" attributes="0"/>
@@ -82,6 +68,12 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtId" min="-2" pref="79" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -95,25 +87,21 @@
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtId" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="31" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtDiac" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtMesc" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtAnoc" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbDiaC" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbMesC" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbAnoC" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtDiaf" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel20" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtMesf" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtAnof" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbDiaF" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbMesF" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbAnoF" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtValor" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -144,38 +132,6 @@
         <Property name="text" type="java.lang.String" value="Valor do Contrato(ano):"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtDiac">
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel17">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="/"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtMesc">
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel18">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="/"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtAnoc">
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtDiaf">
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel19">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="/"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel20">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="/"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtMesf">
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtAnof">
-    </Component>
     <Component class="javax.swing.JTextField" name="txtValor">
     </Component>
     <Component class="javax.swing.JButton" name="btAdd">
@@ -200,6 +156,99 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtId">
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cbDiaC">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbDiaCActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cbMesC">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cbAnoC">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cbDiaF">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cbMesF">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cbAnoF">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="Item 1"/>
+            <StringItem index="1" value="Item 2"/>
+            <StringItem index="2" value="Item 3"/>
+            <StringItem index="3" value="Item 4"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

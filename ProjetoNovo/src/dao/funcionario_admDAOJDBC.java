@@ -161,7 +161,8 @@ public class funcionario_admDAOJDBC implements funcionario_admDAO{
         return funcionarios;
     }
     
-    public funcionario_adm selecionar(String id){
+    @Override
+    public funcionario_adm selecionar(String id) throws SQLException{
         String select = "SELECT * FROM funcionario_adm WHERE id_funcionario = ?";
         funcionario_adm funcionario = new funcionario_adm();
          
@@ -169,6 +170,7 @@ public class funcionario_admDAOJDBC implements funcionario_admDAO{
             conexao = ConexaoMySQL.getConexao();
             sql = (PreparedStatement) conexao.prepareStatement(select);
             sql.setInt(1, Integer.parseInt(id));
+            
             rset = sql.executeQuery();
             
             while (rset.next()){
@@ -187,8 +189,8 @@ public class funcionario_admDAOJDBC implements funcionario_admDAO{
             }
             
             
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(funcionario_admDAOJDBC.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             fecharConexao();
         }

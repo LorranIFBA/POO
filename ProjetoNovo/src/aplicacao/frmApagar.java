@@ -29,6 +29,9 @@ public class frmApagar extends javax.swing.JFrame {
     
     private void apagar(int apg_codigo){
         Integer codigo = apg_codigo;
+        
+
+        
         int linha2 = funcionario2DAO.apagar(codigo);
         int linha3 = funcionario3DAO.apagar(codigo);
         int linha1 = funcionario1DAO.apagar(codigo);
@@ -102,9 +105,14 @@ public class frmApagar extends javax.swing.JFrame {
 
     private void btContActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btContActionPerformed
         // TODO add your handling code here:
-        Integer idBusca = Integer.parseInt(txtEdt.getText());
-        apagar(idBusca);
-        this.dispose();
+        if (txtEdt.getText().matches("^[0-9]+$")){
+            Integer idBusca = Integer.parseInt(txtEdt.getText());
+            apagar(idBusca);
+            this.dispose();
+        } else{
+            JOptionPane.showMessageDialog(this, "Insira apenas números.");
+        }
+        
     }//GEN-LAST:event_btContActionPerformed
 
     /**
