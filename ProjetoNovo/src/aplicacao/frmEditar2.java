@@ -181,7 +181,11 @@ public class frmEditar2 extends javax.swing.JFrame {
                 JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, opcao, opcao[0]);
         if (opcaoSelecionada == 1) {
             this.dispose();
-            new frmPrincipal().setVisible(true);
+            try {
+                new frmTabela().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(frmEditar2.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
         private void selectTest(String id) throws SQLException{
@@ -189,7 +193,7 @@ public class frmEditar2 extends javax.swing.JFrame {
             funcionario_adm funcionario1 = funcionario1DAO.selecionar(id);
         } catch (SQLException ex) {
             this.dispose();
-            new frmPrincipal().setVisible(true);
+            new frmTabela().setVisible(true);
             throw ex;         
         }
     }

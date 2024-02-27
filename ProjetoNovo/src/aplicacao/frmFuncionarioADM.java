@@ -7,7 +7,10 @@ package aplicacao;
 
 import dao.DaoFactory;
 import dao.funcionario_admDAO;
+import java.sql.SQLException;
 import java.time.Year;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.funcionario_adm;
 
@@ -90,7 +93,11 @@ public class frmFuncionarioADM extends javax.swing.JFrame {
         if (opcaoSelecionada == 1) {
             
             this.dispose();
-            new frmPrincipal().setVisible(true);
+            try {
+                new frmTabela().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(frmFuncionarioADM.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
         

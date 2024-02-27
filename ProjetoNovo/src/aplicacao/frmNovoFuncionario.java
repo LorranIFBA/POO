@@ -9,7 +9,10 @@ import dao.DaoFactory;
 import dao.funcionario_admDAO;
 import dao.funcionario_endDAO;
 import dao.funcionario_pesDAO;
+import java.sql.SQLException;
 import java.time.Year;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.funcionario_adm;
 import modelo.funcionario_end;
@@ -90,7 +93,11 @@ public class frmNovoFuncionario extends javax.swing.JFrame {
 
             if (linha2 > 0 && linha3 > 0){
                 JOptionPane.showMessageDialog(this, "Funcionario adicionado com sucesso!");
-                new frmPrincipal().setVisible(true);
+                try {
+                    new frmTabela().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(frmNovoFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 this.dispose();
             } else{
                 JOptionPane.showMessageDialog(this, "Erro ao inserir funcionario.");
@@ -110,6 +117,11 @@ public class frmNovoFuncionario extends javax.swing.JFrame {
             Integer id = Integer.parseInt(this.funcionario.getId_funcionario());
             apagar(id);
             this.dispose();
+            try {
+                new frmTabela().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(frmNovoFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
         

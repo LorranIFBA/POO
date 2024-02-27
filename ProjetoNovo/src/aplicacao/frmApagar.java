@@ -9,6 +9,9 @@ import dao.DaoFactory;
 import dao.funcionario_admDAO;
 import dao.funcionario_endDAO;
 import dao.funcionario_pesDAO;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -68,6 +71,11 @@ public class frmApagar extends javax.swing.JFrame {
         });
 
         btCanc.setText("Cancelar");
+        btCanc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,6 +122,15 @@ public class frmApagar extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btContActionPerformed
+
+    private void btCancActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancActionPerformed
+        try {
+            // TODO add your handling code here:
+            new frmTabela().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(frmApagar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btCancActionPerformed
 
     /**
      * @param args the command line arguments
